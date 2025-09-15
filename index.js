@@ -3,21 +3,19 @@ import bodyParser from 'body-parser';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// Fix __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-let posts = []; // in-memory storage
+let posts = []; 
 
-// Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 
-// Routes
 
-// Home - show posts + new post form
+
+// Home page where you can see posts or create one
 app.get('/', (req, res) => {
   res.render('index', { posts });
 });
@@ -33,7 +31,7 @@ app.post('/new', (req, res) => {
 // Delete post
 app.post('/delete/:id', (req, res) => {
   const id = req.params.id;
-  posts.splice(id, 1); // remove the post
+  posts.splice(id, 1); 
   res.redirect('/');
 });
 
@@ -45,12 +43,12 @@ app.get('/edit/:id', (req, res) => {
   res.render('index', { posts, editId: id, editPost: post });
 });
 
-// Update post
+// Edit post
 app.post('/edit/:id', (req, res) => {
   const id = req.params.id;
   const { name, title, content } = req.body;
 
-  // Keep original timestamp
+  // Timestamp
   const createdAt = posts[id].createdAt;
 
   // Update post in memory
@@ -59,8 +57,8 @@ app.post('/edit/:id', (req, res) => {
   res.redirect('/');
 });
 
-// Start server
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
+
