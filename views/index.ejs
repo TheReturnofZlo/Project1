@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Blog</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <h1>Blog Posts</h1>
+
+  <!-- New Post Form -->
+  <form action="/new" method="POST">
+    <input type="text" name="name" placeholder="Your name" required>
+    <input type="text" name="title" placeholder="Post title" required>
+    <textarea name="content" placeholder="Write your post..." required></textarea>
+    <button type="submit">Add Post</button>
+  </form>
+
+  <hr>
+
+  <!-- Edit Post Form -->
+  <% if (typeof editId !== 'undefined') { %>
+    <h3>Edit Post</h3>
+    <form action="/edit/<%= editId %>" method="POST">
+      <input type="text" name="name" value="<%= editPost.name %>" required>
+      <input type="text" name="title" value="<%= editPost.title %>" required>
+      <textarea name="content" required><%= editPost.content %></textarea>
+      <button type="submit">Update Post</button>
+    </form>
+    <hr>
+  <% } %>
+
+  <!-- Show Posts -->
+  <% if (posts.length > 0) { %>
+    <ul>
+      <% posts.forEach((post, index) => { %>
+        <li>
+          <h2><%= post.title %></h2>
+          <p><%= post.content %></p>
+          <small>By <strong><%= post.name %></strong> at <%= post.createdAt %></small>
+          <div style="margin-top: 5px;">
+            <form action="/delete/<%= index %>" method="POST" style="display:inline;">
+              <button type="submit">Delete</button>
+            </form>
+            <form action="/edit/<%= index %>" method="GET" style="display:inline;">
+              <button type="submit">Edit</button>
+            </form>
+          </div>
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p>No posts yet. Create one above!</p>
+  <% } %>
+</body>
+</html>
